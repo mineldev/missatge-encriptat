@@ -1,4 +1,4 @@
-async function gerenarParFirma() {
+async function generarParFirma() {
     return await crypto.subtle.generateKey(
         {
             name: "RSA-PSS",
@@ -29,4 +29,14 @@ function bufferABase64(buffer) {
     let binario = "";
     for (const b of bytes) binario += String.fromCharCode(b);
     return btoa(binario);
+}
+
+async function exportarPublica(clave){
+    const bytes = await crypto.subtle.exportKey("spki", clave);
+    return bufferABase64(bytes);
+}
+
+async function exportarPrivada(clave) {
+    const bytes = await crypto.subtle.exportKey("pkcs8", clave);
+    return bufferABase64(bytes);
 }

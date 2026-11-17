@@ -23,3 +23,10 @@ async function generarParCifrado() {
         ["encrypt", "decrypt"]
     );
 }
+
+function bufferABase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binario = "";
+    for (const b of bytes) binario += String.fromCharCode(b);
+    return btoa(binario);
+}

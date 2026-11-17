@@ -1,3 +1,5 @@
+let misClaves = {};
+
 async function generarParFirma() {
     return await crypto.subtle.generateKey(
         {
@@ -40,3 +42,22 @@ async function exportarPrivada(clave) {
     const bytes = await crypto.subtle.exportKey("pkcs8", clave);
     return bufferABase64(bytes);
 }
+
+document.getElementById("btnGenerar").addEventListener("click", async () => {
+    const parFirma = await generarParFirma();
+    const parCifrado = await generarParCifrado();
+    misClaves = { firma: parFirma, cifrado: parCifrado };
+    
+    const publicas = {
+        firma: await exportarPublica(parFirma.publicKey),
+        cifrado: await exportarPublica(parCifrado.publicKey),
+    };
+    const privadas = {
+        firma: await exportarPrivada(parFirma.privateKey),
+        cifrado: await exportarPrivada(parCifrado.privateKey),
+    };
+
+    document.getElementById("miPublica").value = JSON.stringify(publicas, null, 2);
+    document.getElementById("miPrivada").value = JSON.stringify(privadas, null, 2);
+
+});
